@@ -7,10 +7,12 @@ let intervalId = null
 
 class MessageBox extends React.Component {
   state = {
-    messages: []
+    messages: [],
+    isLoading: false,
   }
 
   componentDidMount() {
+    this.setState({ isLoading: true })
     this.fetchMessages()
   }
 
@@ -29,11 +31,14 @@ class MessageBox extends React.Component {
       axiosInstance().get('api/v1/messages')
         .then(res => {
           if (res.data && res.data.results) {
-            this.setState({ messages: res.data.results })
+            this.setState({ messages: res.data.results, isLoading: false })
           }
         })
-        .catch(err => console.log('error', err))
-      }, 1000)
+        .catch(err => {
+          console.log('error', err)
+          this.setState({ isLoading: false })
+        })
+    }, 1000)
   }
 
   componentWillUnmount() {
@@ -41,8 +46,8 @@ class MessageBox extends React.Component {
   }
 
   render() {
-    const { messages } = this.state
-    const sortedMessages = messages.sort((a, b) => (
+    const { messages, isLoading } = this.state
+    let sortedMessages = messages.sort((a, b) => (
       new Date(b.posted_at) - new Date(a.posted_at)
     ))
 
@@ -50,12 +55,14 @@ class MessageBox extends React.Component {
       <div className='pt-3'>
         <h4>Messages:</h4>
         <hr />
-        {sortedMessages && sortedMessages.map((item, i) => (
-          <MessageBlock color="info" key={i} >
-            <b>{item.sender}</b>: &nbsp;
-            {item.body}
-          </MessageBlock>
-        ))}
+        {isLoading ? <p style={{ textAlign: 'center' }}>fetching...</p> : (
+          sortedMessages && sortedMessages.length > 0 ? sortedMessages.map((item, i) => (
+            <MessageBlock color="info" key={i} >
+              <b>{item.sender}</b>: &nbsp;
+              {item.body}
+            </MessageBlock>
+          )) : 'No message to display'
+        )}
       </div>
     )
   }

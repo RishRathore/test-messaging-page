@@ -11,7 +11,8 @@ body {
 .container-box {
   border: outset;
   border-radius: 10px;
-  /* height: auto; */
+  overflow: auto;
+  height: 600px;
 }
 
 .error-msg {
