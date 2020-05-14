@@ -7,13 +7,13 @@ export default class SideBlock extends React.Component {
   }
 
   render() {
-    const { isOnline } = this.state
+    const { isOnline, toggleStatus, toggleModal } = this.props
 
     return (
       <div className='pt-3'>
         <div className='row'>
           <div className='col-12'>
-            <Button color="primary">Create Message</Button>
+            <Button color="primary" onClick={toggleModal}>Create Message</Button>
           </div>
         </div>
         <div className="row custom-control custom-switch mt-4" >
@@ -27,9 +27,7 @@ export default class SideBlock extends React.Component {
             <label
               className="custom-control-label"
               forHtml="customSwitch1"
-              onClick={() => {
-                this.setState(state => ({ isOnline: !state.isOnline }))
-              }}
+              onClick={toggleStatus}
             >
               {isOnline ? 'Go offline' : 'Go online'}
             </label>
