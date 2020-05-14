@@ -1,4 +1,5 @@
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import MessageBox from './components/MessageBox'
 import MessageFormSection from './components/MessageFormSection'
@@ -17,6 +18,7 @@ const App = () => (
         <MessageFormSection />
       </div>
     </div>
+    <ToastContainer />
   </div>
 )
 

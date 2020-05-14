@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap'
 
+import { triggerNotifier } from '../utils/notifier'
+
 export default class MessageFormSection extends React.Component {
   state = {
     isOnline: true,
@@ -44,7 +46,7 @@ export default class MessageFormSection extends React.Component {
       const params = {
         body,
         sender,
-        timeStamp: new Date()
+        posted_at: new Date()
       }
 
       if (isOnline) {
@@ -53,10 +55,16 @@ export default class MessageFormSection extends React.Component {
         this.setState(state => ({
           messageBuffer: [...state.messageBuffer, params]
         }))
+        triggerNotifier({
+          type: 'info',
+          message: 'Your are offline !. The create request has been bufferred'
+        })
       }
       !isValid && this.setState({ isValid: true }) // reset state
     } else this.setState({ isValid: false })
   }
+
+
 
   render() {
     const { isOnline, sender, body, isValid } = this.state

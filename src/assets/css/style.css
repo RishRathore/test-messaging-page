@@ -18,3 +18,7 @@ body {
   color: rgb(191, 87, 87);
   font-size: 14px;
 }
+
+.notifier-custom {
+	opacity: 0.8;
+}
