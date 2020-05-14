@@ -7,8 +7,8 @@ class MessageBox extends React.Component {
   render() {
     return (
       <div className='pt-3'>
-        {messages && messages.map(item => (
-          <MessageBlock color="info">
+        {messages && messages.map((item, i) => (
+          <MessageBlock color="info" key={i} >
             <b>{item.sender}</b>: &nbsp;
             {item.body}
           </MessageBlock>

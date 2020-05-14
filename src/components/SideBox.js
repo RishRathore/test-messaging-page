@@ -23,10 +23,11 @@ export default class SideBlock extends React.Component {
               className="custom-control-input"
               id="customSwitch1"
               checked={isOnline}
+              readOnly
             />
             <label
               className="custom-control-label"
-              forHtml="customSwitch1"
+              forhtml="customSwitch1"
               onClick={toggleStatus}
             >
               {isOnline ? 'Go offline' : 'Go online'}

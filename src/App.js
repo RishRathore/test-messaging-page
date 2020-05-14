@@ -11,6 +11,20 @@ class App extends React.Component {
     openForm: false,
     body: '',
     sender: '',
+    messageBuffer: [],
+    isValid: true,
+  }
+
+  componentDidUpdate = ({ }, prevState) => {
+    const { isOnline, messageBuffer } = this.state
+
+    if (isOnline !== prevState.isOnline && isOnline && messageBuffer.length > 0) {
+      messageBuffer.forEach(params => {
+        console.log('call create message api', params)
+      })
+
+      this.setState({ messageBuffer: [] })
+    }
   }
 
   toggleStatus = () => {
@@ -20,7 +34,7 @@ class App extends React.Component {
   toggleModal = () => {
     this.setState(state => {
       if (state.openForm) { // close and reset form
-        return { openForm: !state.openForm, body: '', sender: '' }
+        return { openForm: !state.openForm, body: '', sender: '', isValid: true }
       }
       return { openForm: !state.openForm }
     })
@@ -30,12 +44,36 @@ class App extends React.Component {
     this.setState({ [name]: value })
   }
 
+  onSubmit = () => {
+    const {
+      state: { isOnline, body, sender, isValid }
+    } = this
+
+    if (sender !== '' && body !== '') {
+      const params = {
+        body,
+        sender,
+        timeStamp: new Date()
+      }
+
+      if (isOnline) {
+        console.log('call create api', params)
+      } else {
+        this.setState(state => ({
+          messageBuffer: [...state.messageBuffer, params]
+        }))
+      }
+      !isValid && this.setState({ isValid: true }) // reset state
+    } else this.setState({ isValid: false })
+  }
+
   render() {
     const {
       isOnline,
       openForm,
       body,
-      sender
+      sender,
+      isValid
     } = this.state
 
     return (
@@ -55,7 +93,8 @@ class App extends React.Component {
             open={openForm}
             toggle={this.toggleModal}
             onCancel={this.toggleModal}
-            onSubmit={this.toggleModal}
+            onSubmit={this.onSubmit}
+            error={!isValid ? '* both fields required' : ''}
           >
             <Form>
               <FormGroup>
