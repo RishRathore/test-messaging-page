@@ -13,3 +13,8 @@ body {
   border-radius: 10px;
   /* height: auto; */
 }
+
+.error-msg {
+  color: rgb(191, 87, 87);
+  font-size: 14px;
+}
