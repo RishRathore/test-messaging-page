@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap'
 
+import axiosInstance from '../requestConfig'
 import { triggerNotifier } from '../utils/notifier'
 
 export default class MessageFormSection extends React.Component {
@@ -12,7 +13,7 @@ export default class MessageFormSection extends React.Component {
     isValid: true,
   }
 
-  componentDidUpdate = ({ }, prevState) => {
+  componentDidUpdate = ({}, prevState) => {
     const {
       state: { messageBuffer },
       props: { isOnline }
@@ -50,6 +51,7 @@ export default class MessageFormSection extends React.Component {
 
       if (isOnline) {
         console.log('call create api', params)
+        this.createMessage(params)
       } else {
         this.setState(state => ({
           messageBuffer: [...state.messageBuffer, params]
@@ -60,7 +62,14 @@ export default class MessageFormSection extends React.Component {
         })
       }
       !isValid && this.setState({ isValid: true }) // reset state
+      this.resetForm()
     } else this.setState({ isValid: false })
+  }
+
+  createMessage = params => {
+    axiosInstance().post('api/v1/messages', params)
+    .then(res => console.log('sucsess', res))
+    .catch(err => console.log('error', err))
   }
 
   render() {
