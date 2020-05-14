@@ -13,13 +13,13 @@ export default class MessageFormSection extends React.Component {
     isValid: true,
   }
 
-  componentDidUpdate = ({}, prevState) => {
+  componentDidUpdate = (prevProps) => {
     const {
       state: { messageBuffer },
       props: { isOnline }
     } = this
 
-    if (isOnline !== prevState.isOnline && isOnline && messageBuffer.length > 0) {
+    if (isOnline !== prevProps.isOnline && isOnline && messageBuffer.length > 0) {
       messageBuffer.forEach(params => {
         console.log('call buffer to create message api', params)
         this.createMessage(params)
