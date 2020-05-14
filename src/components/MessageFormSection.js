@@ -5,7 +5,6 @@ import { triggerNotifier } from '../utils/notifier'
 
 export default class MessageFormSection extends React.Component {
   state = {
-    isOnline: true,
     openForm: false,
     body: '',
     sender: '',
@@ -14,7 +13,10 @@ export default class MessageFormSection extends React.Component {
   }
 
   componentDidUpdate = ({ }, prevState) => {
-    const { isOnline, messageBuffer } = this.state
+    const {
+      state: { messageBuffer },
+      props: { isOnline }
+    } = this
 
     if (isOnline !== prevState.isOnline && isOnline && messageBuffer.length > 0) {
       messageBuffer.forEach(params => {
@@ -23,10 +25,6 @@ export default class MessageFormSection extends React.Component {
 
       this.setState({ messageBuffer: [] })
     }
-  }
-
-  toggleStatus = () => {
-    this.setState(state => ({ isOnline: !state.isOnline }))
   }
 
   handleInput = ({ target: { name, value } }) => {
@@ -39,7 +37,8 @@ export default class MessageFormSection extends React.Component {
 
   onSubmit = () => {
     const {
-      state: { isOnline, body, sender, isValid }
+      state: { body, sender, isValid },
+      props: { isOnline }
     } = this
 
     if (sender !== '' && body !== '') {
@@ -64,10 +63,11 @@ export default class MessageFormSection extends React.Component {
     } else this.setState({ isValid: false })
   }
 
-
-
   render() {
-    const { isOnline, sender, body, isValid } = this.state
+    const {
+      state: { sender, body, isValid },
+      props: { isOnline, setOnlineStatus } 
+    } = this
 
     return (
       <div className='container'>
@@ -83,7 +83,7 @@ export default class MessageFormSection extends React.Component {
             <label
               className="custom-control-label"
               forhtml="customSwitch1"
-              onClick={this.toggleStatus}
+              onClick={() => setOnlineStatus(!isOnline)}
             >
               {isOnline ? 'online' : 'offline'}
             </label>
